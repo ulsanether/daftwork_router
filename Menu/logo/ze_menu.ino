@@ -5,7 +5,7 @@ Z probe로 잡을 수 있다.
 
 
 void updatezeo(void) {
-  int btn = digitalRead(zero_button);
+  int btn;
   if ( uiKeyCode != KEY_NONE && last_key_code == uiKeyCode ) {
     return;
   }
@@ -46,16 +46,16 @@ void updatezeo(void) {
 
 void zeroMenu(void) {
 
-  u8g.setFont(u8g_font_cu12);
+  u8g2.setFont(u8g_font_cu12);
  
-  u8g.firstPage();
+  u8g2.firstPage();
   do {
-     u8g.drawFrame(0, 0, 128, 64);
-    u8g.drawBitmapP( 10, 10, 5, 52, zero);
-    u8g.drawBitmapP( 83, 3, 3, 59, zero1);
-    u8g.setPrintPos(15, 20);
-    u8g.print(router);
-  } while ( u8g.nextPage() );
+     u8g2.drawFrame(0, 0, 128, 64);
+    u8g2.drawBitmap( 10, 10, 5, 52, zero);
+    u8g2.drawBitmap( 83, 3, 3, 59, zero1);
+    u8g2.setCursor(15, 20);
+    u8g2.print(router);
+  } while ( u8g2.nextPage() );
 
 
 }

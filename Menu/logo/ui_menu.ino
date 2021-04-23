@@ -13,7 +13,7 @@ void updateact(void) {
     return;
   }
   last_key_code = uiKeyCode;
-  switch ( uiKeyCode ) {
+  switch (units) {
     case KEY_NEXT:
        if(ver2 == 4.5) {
         step_up(2);  
@@ -51,23 +51,23 @@ void updateact(void) {
 
 }
 
-void actMenu() {
+void actMenu(){
 
-  u8g.setFont(u8g_font_fub14);
-  u8g.firstPage();
+ // u8g2.setFont(u8g_font_fub14);
+  u8g2.firstPage();
   do {
-    u8g.setPrintPos(34, 2);
-    u8g.print("position");
-    u8g.drawFrame(0, 0, 128, 64);
-    u8g.drawLine(28, 20, 128, 20);
-    u8g.drawBitmapP( 2, 3, 3, 59, atr);
-    u8g.setPrintPos(28, 40);
-    u8g.print(router);
-    u8g.print("mm");
+    u8g2.setCursor(34, 2);
+    u8g2.print("position");
+    u8g2.drawFrame(0, 0, 128, 64);
+    u8g2.drawLine(28, 20, 128, 20);
+    u8g2.drawBitmap( 2, 3, 3, 59, atr);
+    u8g2.setCursor(28, 40);
+    u8g2.print(router);
+    u8g2.print("mm");
     if (ver2 == 4.5) {
-      u8g.drawBitmapP( 6, 20, 2, 15, zero3);
+      u8g2.drawBitmap( 6, 20, 2, 15, zero3);
     } else if (ver2 == 0) {
-      u8g.drawBitmapP( 6, 30, 2, 15, zero4);
+      u8g2.drawBitmap( 6, 30, 2, 15, zero4);
     }
-  } while ( u8g.nextPage() );
+  } while ( u8g2.nextPage() );
 }
