@@ -1,8 +1,8 @@
 
-#include <math.h>
+#include <math.h>  //연산 모듈
 #include <SPI.h>
-#include <U8g2lib.h>     /* LCD */
-#include "ClickEncoder.h"
+#include <U8g2lib.h>   //lcd 모듈
+#include "ClickEncoder.h"  //로타리 엔코더 
 #include "Menu.h"
 #include "pin_map.h"
 #include "logo.h"
@@ -69,10 +69,16 @@ AccelStepper stepper = AccelStepper(1, stepPin, dirPin);
 int Move_high = 160;
 int Move_low  = -160;
 
+
+
+
 void setup() {
   Serial.begin(115200);
   u8g2.enableUTF8Print();
   dht.begin();
+
+  pinMode(KILL_PIN, INPUT_PULLUP);
+
 
   //set up Menu
   memcpy(menu_current, menu_setup, sizeof(menu_setup));
@@ -156,20 +162,19 @@ void loop() {
   if (Running) {  //running가 참일때
     u8g2.firstPage();
     do {
+      drawMenu(menu_setup, *(&menu_setup + 1) - menu_setup  );
       u8g2.setCursor(10, 15);
       switch (units) {
         case 0:
-          drawMenu(menu_setup, *(&menu_setup + 1) - menu_setup  );
+
           break;
         case 1:
-          zeroMenu();
+
+
           break;
 
         case 2:
-          updatemem();
-          break;
-        case 3:
-          updatemem();
+
           break;
       }
     } while ( u8g2.nextPage() );
@@ -184,8 +189,8 @@ void loop() {
     }
   }
 
-  // ClickEncoder
-  value += encoder->getValue();
+  // 클릭 했을 겨웅 
+  value += encoder->getValue();    // 
   if (value < 0) {
     value = 0; 
   }
@@ -207,6 +212,7 @@ void loop() {
         Serial.println("ClickEncoder::Clicked");
         if (Running == 0) {
           menu_redraw_required = 1;
+    
           menuClick(value);
         } else {
           Running = 0;
@@ -230,10 +236,10 @@ void loop() {
 void drawMenu(const char *menu[], uint8_t menu_len) {
   uint8_t i, h;
   u8g2_uint_t w, d;
-  u8g2.setFont(u8g2_font_unifont_t_korean1);
-  u8g2.setFontDirection(0);
+
   u8g2.drawLine(60, 5, 60, 59);
   u8g2.drawFrame(0, 0, 128, 64);
+
   h = u8g2.getFontAscent() - u8g2.getFontDescent() * 3;
   w = u8g2.getWidth() / 3;
   for (  i = 0; i < menu_len; i++ ) {
