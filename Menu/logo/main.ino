@@ -162,21 +162,30 @@ void loop() {
   if (Running) {  //running가 참일때
     u8g2.firstPage();
     do {
-      drawMenu(menu_setup, *(&menu_setup + 1) - menu_setup  );
-      u8g2.setCursor(10, 15);
+      drawMenu(menu_setup, *(&menu_setup + 1) - menu_setup);
+      u8g2.setCursor(10, 20);
+
       switch (units) {
         case 0:
+          if (menu_redraw_required != 0 ) {  //들어 가긴 하는데, 무한 반복이 되지 않는다. 토글을 넣을것
+
+            u8g2.firstPage();
+            do {
+              actMenu();
+
+            } while ( u8g2.nextPage());
+            menu_redraw_required = 0;
+          }
 
           break;
         case 1:
 
-
           break;
-
         case 2:
 
           break;
       }
+
     } while ( u8g2.nextPage() );
 
   } else {    //Draw Menu
@@ -189,16 +198,16 @@ void loop() {
     }
   }
 
-  // 클릭 했을 겨웅 
-  value += encoder->getValue();    // 
+  // 클릭 했을 겨웅
+  value += encoder->getValue();    //
   if (value < 0) {
-    value = 0; 
+    value = 0;
   }
   if (value > menu_length_current - 1) {
     value = menu_length_current - 1;
   }
   if (value != last) {
-    Serial.print("Encoder Value: ");
+    Serial.print("Encoder Value: ");  //휠값 업데이트 함수
     Serial.println(value);
     updateMenu(value);                            // update menu bar
     last = value;
@@ -208,21 +217,21 @@ void loop() {
   ClickEncoder::Button b = encoder->getButton();
   if (b != ClickEncoder::Open) {
     switch (b) {
-      case ClickEncoder::Clicked:
+      case ClickEncoder::Clicked:  //클릭 함수
         Serial.println("ClickEncoder::Clicked");
         if (Running == 0) {
           menu_redraw_required = 1;
-    
+
           menuClick(value);
         } else {
           Running = 0;
         }
         break;
       case ClickEncoder::Pressed:
-        Serial.println("ClickEncoder::Pressed");
+        Serial.println("ClickEncoder::Pressed");  //일반 클릭 함수
         break;
       case ClickEncoder::DoubleClicked:
-        Serial.println("ClickEncoder::DoubleClicked");
+        Serial.println("ClickEncoder::DoubleClicked");  //더블 클릭 함수
         break;
     }
   }
@@ -236,21 +245,23 @@ void loop() {
 void drawMenu(const char *menu[], uint8_t menu_len) {
   uint8_t i, h;
   u8g2_uint_t w, d;
-
+  u8g2.setFontPosTop();
+  u8g2.drawBitmap( 5, 2, 6, 64, top_menu);
   u8g2.drawLine(60, 5, 60, 59);
   u8g2.drawFrame(0, 0, 128, 64);
 
-  h = u8g2.getFontAscent() - u8g2.getFontDescent() * 3;
-  w = u8g2.getWidth() / 3;
+  h = u8g2.getFontAscent() - u8g2.getFontDescent();
+  w = u8g2.getWidth();
   for (  i = 0; i < menu_len; i++ ) {
-    d = 10; // menu indent
+    d = (w - u8g2.getStrWidth(menu[i]) / 3);
+    u8g2.setDrawColor(2);
     if ( i == menu_item_current ) {
-      u8g2.drawBox(0, i  * h  , w, h);
+      u8g2.drawBox(6, i * (h + 7) + 2, w / 3 + 2, h + 6); //위치값 나중에 좀더 수정.
       u8g2.setDrawColor(0);
-      u8g2.drawUTF8(d, i * h , menu[i]);
+      u8g2.drawUTF8(d, i * (h + 1) , menu[i]);
       u8g2.setDrawColor(1);
     } else {
-      u8g2.drawUTF8(d, i * h , menu[i]);
+      u8g2.drawUTF8(d, i * (h + 1) , menu[i]);
     }
   }
   if (menu_item_current == 0) {
@@ -271,9 +282,9 @@ void updateMenu(int i) {
 }
 
 
-void   menuClick( uint8_t _value) {
+void menuClick( uint8_t _value) {   //누르고 나면 실행되는 함수
   Serial.print("menuClick\t");
-  Serial.println(_value);
+  Serial.println(_value);  //값
   units = _value;
   Running = true;
 }
