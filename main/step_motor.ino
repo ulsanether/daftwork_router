@@ -10,25 +10,25 @@
 */
 
 void step_up(int axis) {
-        stepper.setCurrentPosition(0);
+  stepper.setCurrentPosition(0);
  switch (axis) {
     case 0:  //위로 0.5mm
       stepper.runToNewPosition(Move_high);
-
+      Serial.println("가");
       break;
     case 1:  //1mm  
       stepper.runToNewPosition(Move_high*2);
-
+      Serial.println("나");
       break;
     case 2:  //위로 5mm
-
+      Serial.println("다");
       stepper.runToNewPosition(Move_high*10);
 
       break;
     case 3:  //10mm 
 
       stepper.runToNewPosition(Move_high*20);
-
+Serial.println("라");
       break;
   }
   

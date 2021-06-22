@@ -41,12 +41,6 @@ uint8_t menu_toogle = 0;
 
 
 
-#define KEY_NONE 0
-#define KEY_NONE1 0
-#define KEY_PREV 1
-#define KEY_NEXT 2
-#define KEY_SELECT 3
-#define KEY_BACK 4
 
 #define MENU_ITEMS 3
 #define MEM_ITEMS 4
@@ -69,7 +63,9 @@ int val;
 //tb6600 모터 드라이버 핀번호
 const uint8_t dirPin = 11;  //
 const uint8_t stepPin = 13;  //
-AccelStepper stepper = AccelStepper(1, stepPin, dirPin);
+
+uint8_t kill_button_stat;
+AccelStepper stepper = AccelStepper(1, X_STEP_PIN,X_DIR_PIN);
 //스탭당 이동거리
 int Move_high = 160;
 int Move_low  = -160;
@@ -80,7 +76,8 @@ void setup() {
   dht.begin();
 
   pinMode(KILL_PIN, INPUT_PULLUP);
-
+  stepper.setMaxSpeed(30000);
+  stepper.setAcceleration(30000);
   //set up Menu
   memcpy(menu_current, menu_setup, sizeof(menu_setup));
   menu_length_current = *(&menu_setup + 1) - menu_setup ;
@@ -141,7 +138,6 @@ void setup() {
 // ----------------------------------------------------------------------------
 ISR(TIMER1_COMPA_vect)
 {
-
 }
 
 ISR(TIMER2_COMPA_vect)
@@ -161,22 +157,24 @@ void loop() {
       switch (units) {  //클릭시 진입
         case 0:
           u8g2.firstPage();
-          
       do  { actMenu();  //ui_memu
-      
       } while ( u8g2.nextPage() );
-
-      
           Serial.println(Temp_C );
           units = 10;
- 
           break;
+      
         case 1:
-          Serial.println("a1");
+           u8g2.firstPage();
+      do  {zeroMenu();  //ui_memu
+      } while ( u8g2.nextPage() );
+          Serial.println(Temp_C );
           units = 10;
           break;
         case 2:
-          Serial.println("a2");
+          u8g2.firstPage();
+      do  {memMenu();  //ui_memu
+      } while ( u8g2.nextPage() );
+          Serial.println(Temp_C );
           units = 10;
           break;
       }
