@@ -13,6 +13,7 @@ void step_up(int axis) {
   stepper.setCurrentPosition(0);
  switch (axis) {
     case 0:  //위로 0.5mm
+      
       stepper.runToNewPosition(Move_high);
       Serial.println("가");
       break;

@@ -38,22 +38,18 @@ ClickEncoder *encoder;                //Create instance of ClickEncoder class
 uint8_t menu_toogle = 0;
 
 
-
-
-
-
 #define MENU_ITEMS 3
 #define MEM_ITEMS 4
 
 const char *menu_strings[MENU_ITEMS];
 const char *mem_strings[MEM_ITEMS];
-uint8_t uiKeyCodeFirst = KEY_NONE;
-uint8_t uiKeyCodeSecond = KEY_NONE;
-uint8_t uiKeyCode = KEY_NONE;
-uint8_t last_key_code = KEY_NONE;
+//uint8_t uiKeyCodeFirst = KEY_NONE;
+//uint8_t uiKeyCodeSecond = KEY_NONE;
+//uint8_t uiKeyCode = KEY_NONE;
+//uint8_t last_key_code = KEY_NONE;
 float router = 0;
 float ver = 0;
-float ver1 = 0;
+float ver1 = 0;//
 float ver2 = 0;
 int toogle = 1;
 int menu_state = 1;
@@ -78,6 +74,8 @@ void setup() {
   pinMode(KILL_PIN, INPUT_PULLUP);
   stepper.setMaxSpeed(30000);
   stepper.setAcceleration(30000);
+  stepper.setSpeed(400);
+  stepper.runSpeed();
   //set up Menu
   memcpy(menu_current, menu_setup, sizeof(menu_setup));
   menu_length_current = *(&menu_setup + 1) - menu_setup ;
@@ -207,9 +205,6 @@ void loop() {
   }
 
 
-
-
-  
 
   ClickEncoder::Button b = encoder->getButton();
 
